@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Users</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.10/dist/vue.min.js"></script>
+</head>
+<body>
+<div id="app">
+    First name: <input type="text" v-model="newUser.firstName">
+    Last name: <input type="text" v-model="newUser.lastName">
+    <button @click="addUser">Add user</button>
+
+    <table>
+        <caption>Users</caption>
+        <thead>
+        <tr>
+            <th>Nr.</th>
+            <th>First name</th>
+            <th>Last name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="(user, index) in users" :key="index">
+            <td>{{ index + 1 }}</td>
+            <template v-if="editIndex === index">
+                <td><input type="text" v-model="users[index].firstName"></td>
+                <td><input type="text" v-model="users[index].lastName"></td>
+                <td><button @click="toggleUserEdit(index)">Save user</button></td>
+            </template>
+            <template v-else>
+                <td>{{ user.firstName }}</td>
+                <td>{{ user.lastName }}</td>
+                <td><button @click="deleteUser(index)">Delete user</button></td>
+                <td><button @click="toggleUserEdit(index)">Edit user</button></td>
+            </template>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<script>
+    var vm = new Vue({
+        el: '#app',
+        data: {
+            users: [
+                {
+                    firstName: 'John',
+                    lastName: 'Doe'
+                }
+            ],
+            newUser: {},
+            editIndex: null
+        },
+        methods: {
+            addUser () {
+                this.users.push(this.newUser)
+                this.newUser = {}
+            },
+            deleteUser (index) {
+                this.$delete(this.users, index)
+            },
+            toggleUserEdit (index) {
+                this.editIndex = (this.editIndex !== index) ? index : null
+            }
+        }
+    });
+</script>
+</body>
+</html>
+
